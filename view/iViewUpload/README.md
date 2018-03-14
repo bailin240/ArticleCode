@@ -82,7 +82,7 @@ handleUpload (file) { // 上传文件前的事件钩子
 
 ![](https://user-gold-cdn.xitu.io/2018/3/14/16223a94233d482a?w=649&h=743&f=png&s=55740)
 
-并没有事实上传的操作 这里也只是模拟啦 上传方法是在源码里找到的
+并没有实际上传的操作 这里也只是模拟 上传方法是在源码里找到的
 
 ### 上传成功后
 应该我们的上传文件功能和提交整个页面的数据是分开的 所以提交数据的时候需要验证选择文件是否以上传在上传成功事件里让后右把我们传过去的数据返出来做清空待上传文件数组里的数据，提交数据时候只需要判断待上传文件数组是否为空就可以了
@@ -90,10 +90,14 @@ handleUpload (file) { // 上传文件前的事件钩子
 文件上传回调返回三个参数 
 - res 上传结果 成功与失败 上传之后的地址
 - file 此次上传的文件
+- fileList 文件需要上传的数组数据
 ```
-uploadSuccess (res, file) { // 文件上传回调 上传成功后删除待上传文件
+uploadSuccess (res, file,fileList) { // 文件上传回调 上传成功后删除待上传文件
     console.log(response)
     console.log(file)
+    console.log(fileList)
 },
 ```
 这里有个小问题 应该上传的时候是循环调用上传的，如果多个文件上传这里会有多个回调结果不能成功一个文件提示用户一次，所以需要处理一下，这里自定义一个数每次回调回来作自增处理，当值与上待上传文件的length 相等时才提示上传结果
+
+[详细代码地址](https://github.com/bailin240/ArticleCode/tree/master/view/iViewUpload)
