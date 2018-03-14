@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文件上传</title>
+    <script src="../../js/vue.js"></script>
+    <script type="text/javascript" src="../../js/iview/dist/iview.min.js"></script>
+    <link rel="stylesheet" href="../../js/iview/dist/styles/iview.css">
+</head>
+<body>
+
+<div id="upload" style="margin:50px 200px;">
+        <Upload
+        multiple
+        ref="upload"
+        :before-upload="handleUpload"
+        :show-upload-list="false"
+        :on-success="uploadSuccess"
+        action="//jsonplaceholder.typicode.com/posts/">
+        <Button type="ghost" icon="ios-cloud-upload-outline">浏览</Button>
+    </Upload>
+    <div v-for="(item, index) in file">Upload file: {{ item.name }} 
+        <a href="javascript:;"  @click="delectFile(item.keyID)">X</a>
+        <Button style="margin-left:30px;" size="small" v-if="index === 0" type="primary" @click="upload" >上传</Button>
+    </div>
+</div>
+<script>
+    new Vue({
+        el: '#upload',
+        data: {
+            file: [{
+                name: 'aaa.jpg',
+                type: 'image/jpeg',
+                keyID: 123479
+            },{
+                name: 'bbb.jpg',
+                type: 'image/jpeg',
+                keyID: 987654
+            }], // 总文件List
+            uploadFile: [], // 需要上传的文件List
+        },
+        methods: {
+            handleUpload (file) { // 保存需要上传的文件
+                let keyID = Math.random().toString().substr(2);
+                file['keyID'] = keyID;
+                this.file.push(file);
+                this.uploadFile.push(file)
+                return false;
+            },
+            delectFile (keyID) { // 删除文件
+                this.file = this.file.filter(item => {
+                    return item.keyID != keyID
+                })
+                this.uploadFile = this.uploadFile.filter(item => {
+                    return item.keyID != keyID
+                })
+            },
+            upload () { // 上传文件
+                if(this.uploadFile.length === 0 ) {
+                    this.$Message.error('未选择上传文件') 
+                    return false
+                } 
+                for (let i = 0; i < this.uploadFile.length; i++) {
+                    let item = this.file[i]
+                    this.$refs.upload.post(item);
+                }
+            },
+            uploadSuccess (response, file, fileList) { // 文件上传回调 上传成功后删除待上传文件
+                console.log(response) // 后端返回数据
+                console.log(file)   // 当前上传文件
+                console.log(fileList) // 整个input file 里的文件数组
+            },
+        },
+
+    })
+</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>
