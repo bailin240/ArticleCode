@@ -160,6 +160,7 @@
                 this.$refs.input.click();
             },
             handleChange (e) {
+                debugger
                 const files = e.target.files;
 
                 if (!files) {
@@ -183,6 +184,7 @@
                 });
             },
             upload (file) {
+                debugger
                 if (!this.beforeUpload) {
                     return this.post(file);
                 }
